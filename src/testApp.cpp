@@ -5,7 +5,10 @@ void testApp::setup()
 {
     ofEnableAlphaBlending();
 //    float wxh[2]={ofGetScreenWidth(),ofGetScreenHeight()};
-    
+
+    lineRotation = ofVec3f(.8+ofRandom(.4),.8+ofRandom(.4),.8+ofRandom(.4));
+    mLinesHCount = 20;
+    mLinesWCount = 20;
     mLine.setMode(OF_PRIMITIVE_LINE_STRIP);
     int vertCount = 100;
     float numberOfSwirls = 3.3;
@@ -17,6 +20,29 @@ void testApp::setup()
         mLine.addVertex(ofVec3f(swirlRadius*cos(curRadian),
                                 i*totalSwirlHeight/(vertCount-1),
                                 swirlRadius*sin(curRadian)));
+    }
+
+    
+    arcRotation = ofVec3f(ofRandom(.8),ofRandom(.8),ofRandom(.8));
+    int sVertCount = 70;
+    for(int j = 0; j < SPHERE_ARC_COUNT; j++)
+    {
+        mSphereArcs[j].setMode(OF_PRIMITIVE_LINE_STRIP);
+        float curRotation = ofRandom(360);
+        float curRotationRate = ofRandom(.2);
+        float curXRot = ofRandom(360);
+        float curYRot = ofRandom(360);
+        mArcRotRateXYPlane[j] = ofVec4f(curRotation,curRotationRate,curXRot,curYRot);
+        //arclength will be less than a third of a complete rotation
+        float arcLen = ofRandom(M_PI*2/4.f);
+        float arcRadius = totalSwirlHeight + 300 + ofRandom(50);
+        for(int i = 0; i < sVertCount; i++)
+        {
+            float curRadian = numberOfSwirls*i*arcLen/(sVertCount-1);
+            mSphereArcs[j].addVertex(ofVec3f(arcRadius*cos(curRadian),
+                                             arcRadius*sin(curRadian),
+                                             0));
+        }
     }
 
     
@@ -36,7 +62,10 @@ void testApp::setup()
 
 void testApp::update()
 {
-
+    for(int i = 0; i < SPHERE_ARC_COUNT; i++)
+    {
+        mArcRotRateXYPlane[i].x += mArcRotRateXYPlane[i].y;
+    }
 }
 
 void testApp::draw()
@@ -46,33 +75,59 @@ void testApp::draw()
 //    ofEnableNormalizedTexCoords();
     
     ofPushMatrix();
-    
+    ofTranslate(ofGetScreenWidth()/2,ofGetScreenHeight()/2,0);
     ofPushMatrix();
     ofSetLineWidth(1);
-    ofTranslate(ofGetScreenWidth()/2,ofGetScreenHeight()/2,0);
+    
     float tm = ofGetElapsedTimef();
-//    ofRotateX(tm);
-//    ofRotateY(tm);
-//    ofRotateZ(tm);
+    ofRotateX(lineRotation.x*tm);
+    ofRotateY(lineRotation.y*tm);
+    ofRotateZ(lineRotation.z*tm);
+
+    //render lines
+    float hXPansion = sin(tm/20.2);
+    float wXPansion = sin(tm/30.33);
     
-    
-    int hCount = 30;
-    int wCount = 30;
-    for(int i = 0; i < hCount; i++)
+    for(int i = 0; i < mLinesHCount; i++)
     {
-        for(int j = 0; j < wCount; j++)
+        for(int j = 0; j < mLinesWCount; j++)
         {
             ofPushMatrix();
+            {
                 ofSetColor(255,255,255,255);
-                ofRotateY(j*180*2.f/wCount);
-                ofRotateX((i+.5)*180.f/hCount);
+                ofRotateY(wXPansion*j*180*2.f/mLinesWCount);
+                ofRotateX(hXPansion*(i+.5)*180.f/mLinesHCount);
                 ofRotateY(tm*40);
                 ofTranslate(0, 200);
+                float scale =8.5*(1+cos(tm/40.f+(j)/14.f));
+                float scaleY =4.5*(1+cos(2+tm/32.f+(i)/60.f));
+                ofScale(scale,scaleY ,scale);
                 mLine.draw();
+            }
             ofPopMatrix();
         }
     }
     ofPopMatrix();
+    
+    //render arcs
+    ofPushMatrix();
+    ofRotateX(arcRotation.x*tm);
+    ofRotateY(arcRotation.y*tm);
+    ofRotateZ(arcRotation.z*tm);
+    ofSetLineWidth(6);
+    for(int j = 0; j < SPHERE_ARC_COUNT; j++)
+    {
+        ofPushMatrix();
+        //rotate into a plane
+        ofRotateX(mArcRotRateXYPlane[j].w);
+        ofRotateY(mArcRotRateXYPlane[j].z);
+        
+        ofRotateZ(mArcRotRateXYPlane[j].x);
+        mSphereArcs[j].draw();
+        ofPopMatrix();
+    }
+    ofPopMatrix();
+    
     ofPopMatrix();
 
     stringstream s;
