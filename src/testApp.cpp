@@ -3,6 +3,7 @@
 //--------------------------------------------------------------
 void testApp::setup()
 {
+    mShowFrameRate = false;
     ofEnableAlphaBlending();
 //    float wxh[2]={ofGetScreenWidth(),ofGetScreenHeight()};
 
@@ -129,12 +130,13 @@ void testApp::draw()
     ofPopMatrix();
     
     ofPopMatrix();
-
-    stringstream s;
-    s <<"FPS: " << ofGetFrameRate();
-    string fps = s.str();
-    ofDrawBitmapString(fps, 50,50);
-
+    if(mShowFrameRate)
+    {
+        stringstream s;
+        s <<"FPS: " << ofGetFrameRate();
+        string fps = s.str();
+        ofDrawBitmapString(fps, 50,50);
+    }
 }
 
 
@@ -143,7 +145,7 @@ void testApp::keyPressed  (int key)
     switch(key)
     {
 		case 'f':
-			ofToggleFullscreen();
+            mShowFrameRate = !mShowFrameRate;
 			break;
         
         case '1':

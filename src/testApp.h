@@ -14,6 +14,8 @@ public:
 	void mouseMoved(int x, int y );
 	void mouseDragged(int x, int y, int button);
     
+    bool mShowFrameRate;
+    
     ofVec3f arcRotation;
     ofVec4f mArcRotRateXYPlane[SPHERE_ARC_COUNT];
     ofVboMesh mSphereArcs[SPHERE_ARC_COUNT];
