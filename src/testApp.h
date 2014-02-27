@@ -18,8 +18,8 @@ public:
     ofVec4f mArcRotRateXYPlane[SPHERE_ARC_COUNT];
     ofVboMesh mSphereArcs[SPHERE_ARC_COUNT];
     
-    int mLinesHCount = 20;
-    int mLinesWCount = 20;
+    int mLinesHCount;
+    int mLinesWCount;
     ofVec3f lineRotation;
     ofVboMesh mLine;
 };
