@@ -8,7 +8,6 @@ obj/linuxarmv6l/Release/src/testApp.o: src/testApp.cpp src/testApp.h \
  /opt/vc/include/interface/vcos/vcos_types.h \
  /opt/vc/include/interface/vcos/pthreads/vcos_platform_types.h \
  /opt/vc/include/interface/vcos/vcos_inttypes.h \
- /opt/vc/include/interface/vcos/vcos_attr.h \
  /opt/vc/include/interface/vcos/vcos_types.h \
  /opt/vc/include/interface/vcos/pthreads/vcos_platform.h \
  /opt/vc/include/interface/vcos/generic/vcos_generic_event_flags.h \
@@ -378,8 +377,7 @@ obj/linuxarmv6l/Release/src/testApp.o: src/testApp.cpp src/testApp.h \
  ../../../libs/openFrameworks/video/ofVideoPlayer.h \
  ../../../libs/openFrameworks/video/ofGstVideoPlayer.h \
  ../../../libs/openFrameworks/3d/ofCamera.h \
- ../../../libs/openFrameworks/3d/ofEasyCam.h src/FlowerParticleSystem.h \
- src/BlossomParticle.h src/CloudParticleSystem.h src/CloudParticle.h
+ ../../../libs/openFrameworks/3d/ofEasyCam.h
 
 src/testApp.h:
 
@@ -400,8 +398,6 @@ src/testApp.h:
 /opt/vc/include/interface/vcos/pthreads/vcos_platform_types.h:
 
 /opt/vc/include/interface/vcos/vcos_inttypes.h:
-
-/opt/vc/include/interface/vcos/vcos_attr.h:
 
 /opt/vc/include/interface/vcos/vcos_types.h:
 
@@ -1184,11 +1180,3 @@ src/testApp.h:
 ../../../libs/openFrameworks/3d/ofCamera.h:
 
 ../../../libs/openFrameworks/3d/ofEasyCam.h:
-
-src/FlowerParticleSystem.h:
-
-src/BlossomParticle.h:
-
-src/CloudParticleSystem.h:
-
-src/CloudParticle.h:
