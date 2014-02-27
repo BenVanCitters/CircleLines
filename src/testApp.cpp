@@ -4,18 +4,21 @@
 void testApp::setup()
 {
     ofEnableAlphaBlending();
-    float wxh[2]={ofGetScreenWidth(),ofGetScreenHeight()};
+//    float wxh[2]={ofGetScreenWidth(),ofGetScreenHeight()};
     
     mLine.setMode(OF_PRIMITIVE_LINE_STRIP);
-    mLine.addVertex(ofVec3f(0,0,0));
-    for(int i = 0; i < 500; i++)
+    int vertCount = 100;
+    float numberOfSwirls = 3.3;
+    float swirlRadius = 10.f;
+    float totalSwirlHeight = 300.f;
+    for(int i = 0; i < vertCount; i++)
     {
-        mLine.addVertex(ofVec3f(ofRandom(1000)-500,ofRandom(1000)-500,ofRandom(1000)-500));
+        float curRadian = numberOfSwirls*i*M_PI*2/(vertCount-1);
+        mLine.addVertex(ofVec3f(swirlRadius*cos(curRadian),
+                                i*totalSwirlHeight/(vertCount-1),
+                                swirlRadius*sin(curRadian)));
     }
-//    mRect.addTexCoord(ofVec2f(0,0));
-//    mRect.addVertex(ofVec3f(0,wxh[1],0));
-//    mRect.addVertex(ofVec3f(wxh[0],0,0));
-//    mRect.addVertex(ofVec3f(wxh[0],wxh[1],0));
+
     
     
     ofLog(OF_LOG_NOTICE, "created Geo...");
@@ -26,7 +29,7 @@ void testApp::setup()
 
 //	windowResized(ofGetWidth(), ofGetHeight());		// force this at start (cos I don't think it is called)
 	
-	ofEnableAlphaBlending();
+//	ofEnableAlphaBlending();
 	ofSetBackgroundAuto(false);
 }
 
@@ -40,21 +43,43 @@ void testApp::draw()
 {
     ofBackground(0,0,0);
     ofEnableAlphaBlending();
-    ofEnableNormalizedTexCoords();
+//    ofEnableNormalizedTexCoords();
     
     ofPushMatrix();
     
     ofPushMatrix();
+    ofSetLineWidth(1);
     ofTranslate(ofGetScreenWidth()/2,ofGetScreenHeight()/2,0);
-    ofRotateX(ofGetElapsedTimef());
-    ofRotateY(ofGetElapsedTimef());
-    ofRotateZ(ofGetElapsedTimef());
-    ofSetColor(255,255,255,255);
-    mLine.draw();
-
+    float tm = ofGetElapsedTimef();
+//    ofRotateX(tm);
+//    ofRotateY(tm);
+//    ofRotateZ(tm);
+    
+    
+    int hCount = 30;
+    int wCount = 30;
+    for(int i = 0; i < hCount; i++)
+    {
+        for(int j = 0; j < wCount; j++)
+        {
+            ofPushMatrix();
+                ofSetColor(255,255,255,255);
+                ofRotateY(j*180*2.f/wCount);
+                ofRotateX((i+.5)*180.f/hCount);
+                ofRotateY(tm*40);
+                ofTranslate(0, 200);
+                mLine.draw();
+            ofPopMatrix();
+        }
+    }
+    ofPopMatrix();
     ofPopMatrix();
 
-    ofPopMatrix();
+    stringstream s;
+    s <<"FPS: " << ofGetFrameRate();
+    string fps = s.str();
+    ofDrawBitmapString(fps, 50,50);
+
 }
 
 
